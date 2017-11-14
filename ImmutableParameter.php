@@ -20,13 +20,23 @@ use ArrayIterator;
 final class ImmutableParameter implements ParameterInterface
 {
     /**
-     * @var array
+     * @var Parameter
      */
-    private $parameters;
+    private $parameter;
 
     public function __construct(array $parameters = [])
     {
-        $this->parameters = $parameters;
+        $this->parameter = new Parameter($parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exclude(array $fields): ParameterInterface
+    {
+        $parameters = $this->parameter->exclude($fields)->all();
+
+        return new ImmutableParameter($parameters);
     }
 
     /**
@@ -34,7 +44,7 @@ final class ImmutableParameter implements ParameterInterface
      */
     public function all(): array
     {
-        return $this->parameters;
+        return $this->parameter->all();
     }
 
     /**
@@ -42,7 +52,7 @@ final class ImmutableParameter implements ParameterInterface
      */
     public function keys(): array
     {
-        return array_keys($this->parameters);
+        return $this->parameter->keys();
     }
 
     /**
@@ -50,8 +60,7 @@ final class ImmutableParameter implements ParameterInterface
      */
     public function get(string $key, $default = null)
     {
-        return array_key_exists($key, $this->parameters)
-            ? $this->parameters[$key] : $default;
+        return $this->parameter->get($key, $default);
     }
 
     /**
@@ -59,7 +68,7 @@ final class ImmutableParameter implements ParameterInterface
      */
     public function has(string $key): bool
     {
-        return array_key_exists($key, $this->parameters);
+        return $this->parameter->has($key);
     }
 
     /**
@@ -67,7 +76,7 @@ final class ImmutableParameter implements ParameterInterface
      */
     public function getIterator(): ArrayIterator
     {
-        return new ArrayIterator($this->parameters);
+        return $this->parameter->getIterator();
     }
 
     /**
@@ -75,6 +84,6 @@ final class ImmutableParameter implements ParameterInterface
      */
     public function isEmpty(): bool
     {
-        return empty($this->parameters);
+        return $this->parameter->isEmpty();
     }
 }

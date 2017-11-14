@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Borobudur\Component\Parameter;
 
+use ArrayIterator;
+
 /**
  * @author  Iqbal Maulana <iq.bluejack@gmail.com>
  */
@@ -25,6 +27,21 @@ final class Parameter implements ParameterInterface
     public function __construct(array $parameters = [])
     {
         $this->parameters = $parameters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exclude(array $fields): ParameterInterface
+    {
+        $parameters = array_filter(
+            $this->parameters,
+            function (string $key) use ($fields) {
+                return !array_key_exists($key, $fields);
+            }
+        );
+
+        return new Parameter($parameters);
     }
 
     /**
@@ -94,9 +111,9 @@ final class Parameter implements ParameterInterface
     /**
      * {@inheritdoc}
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): ArrayIterator
     {
-        return new \ArrayIterator($this->parameters);
+        return new ArrayIterator($this->parameters);
     }
 
     /**

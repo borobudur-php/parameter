@@ -20,6 +20,15 @@ use IteratorAggregate;
 interface ParameterInterface extends IteratorAggregate
 {
     /**
+     * Exclude element based on given fields.
+     *
+     * @param array $fields
+     *
+     * @return ParameterInterface
+     */
+    public function exclude(array $fields): ParameterInterface;
+
+    /**
      * Gets all data in parameters.
      *
      * @return array
