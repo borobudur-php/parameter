@@ -37,8 +37,9 @@ final class Parameter implements ParameterInterface
         $parameters = array_filter(
             $this->parameters,
             function (string $key) use ($fields) {
-                return !array_key_exists($key, $fields);
-            }
+                return !in_array($key, $fields);
+            },
+            ARRAY_FILTER_USE_KEY
         );
 
         return new Parameter($parameters);
